@@ -14,9 +14,32 @@
 //Explanation: The arrays we are merging are [1,2,3] and [2,5,6].
 
 void merge(int* nums1, int nums1Size, int m, int* nums2, int nums2Size, int n) {
+    (void)nums1Size;
+    (void)nums2Size;
 
- // TODO: implement
+    // p1 points to the last valid element in nums1
+    int p1 = m - 1;
+    // p2 points to the last element in nums2
+    int p2 = n - 1;
+    // p points to the last position in the fully merged nums1 array
+    int p = m + n - 1;
 
+    // Traverse both arrays from back to front
+    while (p1 >= 0 && p2 >= 0) {
+        if (nums1[p1] > nums2[p2]) {
+            nums1[p] = nums1[p1];
+            p1--;
+        } else {
+            nums1[p] = nums2[p2];
+            p2--;
+        }
+        p--;
+    }
 
-
+    // If there are leftover elements in nums2, copy them over.
+    while (p2 >= 0) {
+        nums1[p] = nums2[p2];
+        p2--;
+        p--;
+    }
 }

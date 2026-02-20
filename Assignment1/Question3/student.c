@@ -26,8 +26,38 @@
 //Output parameter (returnSize): set *returnSize to the number of digits in the returned array.
 
 int* plusOne(int* digits, int digitsSize, int* returnSize) {
-    // TODO: implement
-
+    // Allocate memory for the standard case (no overflow at the most significant digit)
+    int* result = (int*)malloc(digitsSize * sizeof(int));
     
+    // Copy the original digits into our new result array
+    for (int i = 0; i < digitsSize; i++) {
+        result[i] = digits[i];
+    }
+
+    // Traverse the array from right to left (least to most significant digit)
+    for (int i = digitsSize - 1; i >= 0; i--) {
+        if (result[i] < 9) {
+            // No carry-over needed; just increment and return
+            result[i]++;
+            *returnSize = digitsSize;
+            return result;
+        }
+        // If the digit is 9, it becomes 0, and the carry loops to the next iteration
+        result[i] = 0;
+    }
+
+    // If the loop finishes without returning, all digits were 9 (e.g., 99 -> 100)
+    // We need to free the old result and allocate an array larger by 1
+    free(result);
+    result = (int*)malloc((digitsSize + 1) * sizeof(int));
+    
+    // The new array starts with 1, and all subsequent digits are 0
+    result[0] = 1;
+    for (int i = 1; i <= digitsSize; i++) {
+        result[i] = 0;
+    }
+    
+    *returnSize = digitsSize + 1;
+    return result;
 }
 

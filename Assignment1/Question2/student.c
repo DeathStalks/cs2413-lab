@@ -15,8 +15,23 @@
 
 
 int majorityElement(int* nums, int numsSize) {
-     // TODO: implement
+    int count = 0;
+    int candidate = 0;
 
+    for (int i = 0; i < numsSize; i++) {
+        // When count drops to 0, we pick a new candidate
+        if (count == 0) {
+            candidate = nums[i];
+        }
+        
+        // If the current number matches our candidate, increment count.
+        // Otherwise, decrement the count.
+        if (nums[i] == candidate) {
+            count++;
+        } else {
+            count--;
+        }
+    }
 
-
+    return candidate;
 }
