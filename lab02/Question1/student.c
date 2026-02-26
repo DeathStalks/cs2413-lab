@@ -30,30 +30,54 @@
 #include <string.h>  // strlen
 
 bool isValid(const char *s) {
-    // TODO: Implement using a stack.
-    //
-    // Recommended approach:
-    // - Use a char array as a stack to store opening brackets.
-    // - Scan the string from left to right:
-    //   - If you see an opening bracket, push it.
-    //   - If you see a closing bracket:
-    //       * stack must not be empty
-    //       * top of stack must match the closing bracket type
-    //       * then pop
-    // - At the end, stack must be empty.
-    //
-    // Helpful matching pairs:
-    //   ')' matches '('
-    //   ']' matches '['
-    //   '}' matches '{'
-    //
-    // Corner cases:
-    // - s == NULL -> return false
-    // - odd length strings can’t be valid 
-    //
-    // Note:
-    // - Input contains only bracket characters, per the prompt.
+    // 1. Corner cases
+    if (s == NULL) {
+        return false;
+    }
+    
+    size_t len = strlen(s);
+    if (len == 0) {
+        return true; 
+    }
+    // Odd length strings cannot possibly be valid pairs
+    if (len % 2 != 0) {
+        return false;
+    }
 
-    (void)s; // remove after implementing
-    return false; // placeholder
+    // 2. Initialize the stack
+    // We can use a Variable Length Array (VLA) since the max depth is 'len'
+    char stack[len]; 
+    int top = -1;
+
+    // 3. Scan the string from left to right
+    for (size_t i = 0; i < len; i++) {
+        char c = s[i];
+        
+        // If it's an opening bracket, push it onto the stack
+        if (c == '(' || c == '{' || c == '[') {
+            stack[++top] = c;
+        } 
+        // If it's a closing bracket
+        else {
+            // If the stack is empty, we have a closing bracket with no opening pair
+            if (top == -1) {
+                return false;
+            }
+            
+            char top_char = stack[top];
+            
+            // Check if the closing bracket matches the top of the stack
+            if ((c == ')' && top_char == '(') ||
+                (c == '}' && top_char == '{') ||
+                (c == ']' && top_char == '[')) {
+                top--; // Pop the matched bracket off the stack
+            } else {
+                return false; // Mismatched bracket types
+            }
+        }
+    }
+    
+    // 4. Final check
+    // If the stack is empty (top == -1), all brackets were properly closed.
+    return top == -1;
 }
