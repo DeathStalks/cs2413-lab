@@ -1,6 +1,6 @@
 # Lab Practice 05
 
-This lab contains two array practice questions in C.
+This lab contains two practice questions in C.
 
 ## Folder Structure
 
