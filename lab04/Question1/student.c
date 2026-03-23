@@ -48,5 +48,19 @@ struct TreeNode {
 };
 
 int maxDepth(struct TreeNode* root) {
-  // TODO: implement
+    // Base case: If the tree is empty, the depth is 0
+    if (root == NULL) {
+        return 0;
+    }
+    
+    // Recursive step: Find the depth of the left and right subtrees
+    int leftDepth = maxDepth(root->left);
+    int rightDepth = maxDepth(root->right);
+    
+    // The maximum depth is 1 (for the current node) plus the larger of the two subtrees
+    if (leftDepth > rightDepth) {
+        return 1 + leftDepth;
+    } else {
+        return 1 + rightDepth;
+    }
 }

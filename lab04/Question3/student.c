@@ -55,7 +55,50 @@ struct TreeNode {
     struct TreeNode *right;
 };
 
-
 int sumNumbers(struct TreeNode* root) {
-      // TODO: implement
+    if (root == NULL) {
+        return 0;
+    }
+
+
+    struct TreeNode* nodeStack[2000];
+    int sumStack[2000];
+    int top = -1; // Stack pointer
+
+    int totalSum = 0;
+
+    // Push the root node and its value onto the stacks
+    top++;
+    nodeStack[top] = root;
+    sumStack[top] = root->val;
+
+    // Loop until our stack is empty
+    while (top >= 0) {
+        // Pop the top elements
+        struct TreeNode* currentNode = nodeStack[top];
+        int currentSum = sumStack[top];
+        top--;
+
+        // If we reached a leaf, add the path's sum to our total
+        if (currentNode->left == NULL && currentNode->right == NULL) {
+            totalSum += currentSum;
+        }
+
+        // Push the right child onto the stack if it exists
+        // (We push right first so left is processed first, mimicking standard DFS)
+        if (currentNode->right != NULL) {
+            top++;
+            nodeStack[top] = currentNode->right;
+            sumStack[top] = (currentSum * 10) + currentNode->right->val;
+        }
+
+        // Push the left child onto the stack if it exists
+        if (currentNode->left != NULL) {
+            top++;
+            nodeStack[top] = currentNode->left;
+            sumStack[top] = (currentSum * 10) + currentNode->left->val;
+        }
+    }
+
+    return totalSum;
 }
