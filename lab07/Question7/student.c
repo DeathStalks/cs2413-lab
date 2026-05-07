@@ -59,21 +59,90 @@ int isSorted(int arr[], int size) {
 Sort arr[left...right] using insertion sort.
 */
 void insertionSort(int arr[], int left, int right) {
-    // TODO: implement insertion sort for arr[left...right]
+    for (int i = left + 1; i <= right; i++) {
+        int key = arr[i];
+        int j = i - 1;
+
+        // Move elements of arr[left...i-1] that are greater than key
+        // to one position ahead of their current position
+        while (j >= left && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
 }
 
 /*
-Merge two sorted subarrays into one sorted subarray.
+2. Implementation of Merge operation
 */
 void merge(int arr[], int left, int mid, int right) {
-    // TODO: implement merge operation
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
+    // Create temporary arrays
+    int *L = (int *)malloc(n1 * sizeof(int));
+    int *R = (int *)malloc(n2 * sizeof(int));
+
+    // Copy data to temp arrays
+    for (int i = 0; i < n1; i++)
+        L[i] = arr[left + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = arr[mid + 1 + j];
+
+    // Merge the temp arrays back into arr[left...right]
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    // Copy remaining elements if any
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+
+    free(L);
+    free(R);
 }
 
 /*
-Hybrid merge sort.
+3. Implementation of Hybrid Merge Sort
 */
 void hybridMergeSort(int arr[], int left, int right, int k) {
-    // TODO: implement hybrid merge sort
+    // Base case: if the range is invalid
+    if (left >= right) {
+        return;
+    }
+
+    // Calculate current subarray size
+    int size = right - left + 1;
+
+    // If size is less than or equal to threshold k, use Insertion Sort
+    if (size <= k) {
+        insertionSort(arr, left, right);
+    } else {
+        // Otherwise, proceed with standard Merge Sort recursion
+        int mid = left + (right - left) / 2;
+
+        hybridMergeSort(arr, left, mid, k);
+        hybridMergeSort(arr, mid + 1, right, k);
+        
+        merge(arr, left, mid, right);
+    }
 }
 
 int main() {

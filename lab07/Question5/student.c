@@ -20,9 +20,35 @@ Notes:
 - Do not use any built-in sorting function.
 */
 
-void selectionSort(int arr[], int size) {
-    // TODO: implement selection sort
-    (void)arr;
-    (void)size;
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
+/**
+ * Implementation of the Selection Sort algorithm.
+ */
+void selectionSort(int arr[], int size) {
+    // If the array is empty or has only one element, do nothing
+    if (arr == 0 || size < 2) {
+        return;
+    }
+
+    // One by one move the boundary of the unsorted subarray
+    for (int i = 0; i < size - 1; i++) {
+        // Find the minimum element in the unsorted array
+        int minIndex = i;
+        for (int j = i + 1; j < size; j++) {
+            if (arr[j] < arr[minIndex]) {
+                minIndex = j;
+            }
+        }
+
+        // Swap the found minimum element with the first element
+        // only if a smaller element was actually found
+        if (minIndex != i) {
+            swap(&arr[minIndex], &arr[i]);
+        }
+    }
+}
